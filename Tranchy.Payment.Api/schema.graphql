@@ -1,0 +1,34 @@
+﻿schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Deposit {
+  id: Int!
+  questionId: String!
+  amount: Float!
+  status: String!
+}
+
+type Mutation {
+  createDeposit(request: CreateDepositRequestInput!): Deposit!
+}
+
+type Query {
+  ping(questionId: String!): String! @allowAnonymous
+  deposit(questionId: String!): Deposit
+  deposits: [Deposit!]!
+}
+
+input CreateDepositRequestInput {
+  questionId: String!
+  amount: Float!
+}
+
+enum ApplyPolicy {
+  BEFORE_RESOLVER
+  AFTER_RESOLVER
+  VALIDATION
+}
+
+directive @allowAnonymous repeatable on FIELD_DEFINITION

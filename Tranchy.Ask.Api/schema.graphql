@@ -1,0 +1,109 @@
+﻿schema {
+  query: Query
+  mutation: Mutation
+}
+
+type KeyValuePairOfStringAndString {
+  key: String!
+  value: String!
+}
+
+type Mutation {
+  createQuestion(request: CreateQuestionRequestInput!): Question! @tag(name: "mobile")
+  seedMetadata: Boolean! @tag(name: "web") @authorize(roles: [ "admin" ])
+}
+
+type Query {
+  questionCategories: [QuestionCategory!]!
+  questions: [Question!]!
+}
+
+type Question {
+  hasDefaultID: Boolean!
+  title: String!
+  supportLevel: SupportLevel!
+  status: QuestionStatus!
+  priorityId: String
+  questionCategoryIds: [String!]!
+  communityShareAgreement: Boolean
+  consultant: QuestionConsultant
+  permissions: QuestionPermissions
+  comment: String!
+  createdBy: String!
+  queryIndex: Long!
+  createdOn: DateTime!
+  modifiedOn: DateTime!
+  id: String!
+  questionCategories: [QuestionCategory!]!
+}
+
+type QuestionCategory {
+  hasDefaultID: Boolean!
+  key: String!
+  title: [KeyValuePairOfStringAndString!]!
+  description: [KeyValuePairOfStringAndString!]!
+  createdOn: DateTime!
+  modifiedOn: DateTime!
+  id: String!
+}
+
+type QuestionConsultant {
+  userId: String!
+  createdAt: DateTime!
+  conclusion: String
+  attachmentIds: [String!]!
+}
+
+type QuestionPermissions {
+  actions: [QuestionAction!]!
+  directChatTargetUserId: String
+}
+
+input CreateQuestionRequestInput {
+  title: String!
+  supportLevel: SupportLevel!
+  priorityId: String
+  questionCategoryIds: [String!]!
+  communityShareAgreement: Boolean
+}
+
+enum ApplyPolicy {
+  BEFORE_RESOLVER
+  AFTER_RESOLVER
+  VALIDATION
+}
+
+enum QuestionAction {
+  TAKE_CONSULTATION
+  GO_TO_CONVERSATION
+}
+
+enum QuestionStatus {
+  NEW
+  BEING_REVIEWED
+  ACCEPTED
+  CANCELLED
+  PAYMENT
+  IN_PROGRESS
+  REJECTED
+  RESOLVED
+  CLOSED
+  REPORTED
+}
+
+enum SupportLevel {
+  COMMUNITY
+  EXPERT
+  AGENCY
+}
+
+directive @authorize("The name of the authorization policy that determines access to the annotated resource." policy: String "Roles that are allowed to access the annotated resource." roles: [String!] "Defines when when the authorize directive shall be applied.By default the authorize directives are applied during the validation phase." apply: ApplyPolicy! = BEFORE_RESOLVER) repeatable on OBJECT | FIELD_DEFINITION
+
+"The @tag directive is used to apply arbitrary string\nmetadata to a schema location. Custom tooling can use\nthis metadata during any step of the schema delivery flow,\nincluding composition, static analysis, and documentation.\n\ninterface Book {\n  id: ID! @tag(name: \"your-value\")\n  title: String!\n  author: String!\n}"
+directive @tag(name: String!) repeatable on SCHEMA | SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | INTERFACE | UNION | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")
+
+"The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1."
+scalar Long

@@ -1,0 +1,119 @@
+﻿schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Deposit {
+  amount: Float!
+  id: Int!
+  questionId: String!
+  status: String!
+}
+
+type KeyValuePairOfStringAndString {
+  key: String!
+  value: String!
+}
+
+type Mutation {
+  createDeposit(request: CreateDepositRequestInput!): Deposit!
+  createQuestion(request: CreateQuestionRequestInput!): Question!
+}
+
+type Query {
+  deposit(questionId: String!): Deposit
+  deposits: [Deposit!]!
+  ping(questionId: String!): String!
+  questionCategories: [QuestionCategory!]!
+  questions: [Question!]!
+}
+
+type Question {
+  comment: String!
+  communityShareAgreement: Boolean
+  consultant: QuestionConsultant
+  createdBy: String!
+  createdOn: DateTime!
+  hasDefaultID: Boolean!
+  id: String!
+  modifiedOn: DateTime!
+  permissions: QuestionPermissions
+  priorityId: String
+  queryIndex: Long!
+  questionCategories: [QuestionCategory!]!
+  questionCategoryIds: [String!]!
+  status: QuestionStatus!
+  supportLevel: SupportLevel!
+  title: String!
+}
+
+type QuestionCategory {
+  createdOn: DateTime!
+  description: [KeyValuePairOfStringAndString!]!
+  hasDefaultID: Boolean!
+  id: String!
+  key: String!
+  modifiedOn: DateTime!
+  title: [KeyValuePairOfStringAndString!]!
+}
+
+type QuestionConsultant {
+  attachmentIds: [String!]!
+  conclusion: String
+  createdAt: DateTime!
+  userId: String!
+}
+
+type QuestionPermissions {
+  actions: [QuestionAction!]!
+  directChatTargetUserId: String
+}
+
+input CreateDepositRequestInput {
+  amount: Float!
+  questionId: String!
+}
+
+input CreateQuestionRequestInput {
+  communityShareAgreement: Boolean
+  priorityId: String
+  questionCategoryIds: [String!]!
+  supportLevel: SupportLevel!
+  title: String!
+}
+
+enum ApplyPolicy {
+  AFTER_RESOLVER
+  BEFORE_RESOLVER
+  VALIDATION
+}
+
+enum QuestionAction {
+  GO_TO_CONVERSATION
+  TAKE_CONSULTATION
+}
+
+enum QuestionStatus {
+  ACCEPTED
+  BEING_REVIEWED
+  CANCELLED
+  CLOSED
+  IN_PROGRESS
+  NEW
+  PAYMENT
+  REJECTED
+  REPORTED
+  RESOLVED
+}
+
+enum SupportLevel {
+  AGENCY
+  COMMUNITY
+  EXPERT
+}
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")
+
+"The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1."
+scalar Long
