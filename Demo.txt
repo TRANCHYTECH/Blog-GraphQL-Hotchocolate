@@ -13,17 +13,16 @@ Advanced topics:
 - Helpful annotation attributes" [GraphqlIgnore]...
 - Authorization: use sample duende identity server https://demo.duendesoftware.com/
 or https://auth0.com/blog/whats-new-in-dotnet-7-for-authentication-and-authorization/
-// dotnet user-jwts create --name AdminUser --role admin --role customer --issuer tranchy.tech --expires-on 2029-12-12 --audience https://ask.api --audience https://payment.api --audience https://webff --audience https://mobilebff
+// dotnet user-jwts create --name AdminUser --role admin --role customer --issuer tranchy.tech --expires-on 2029-12-12 --audience https://ask.api --audience https://payment.api --audience https://webff --audience https://mobilebff --claim http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress=customer1@example.com
 
-New JWT saved with ID '76523644'.
-Name: AdminUser
-Audience(s): https://ask.api, https://payment.api, https://webff, https://mobilebff
+udience(s): https://ask.api, https://payment.api, https://webff, https://mobilebff
 Issuer: tranchy.tech
 Expires On: 2029-12-12T00:00:00.0000000Z
 Roles: [admin, customer]
+Custom Claims: [http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress=customer1@example.com]
 
+Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IkFkbWluVXNlciIsInN1YiI6IkFkbWluVXNlciIsImp0aSI6ImJjYTMwYmVjIiwicm9sZSI6WyJhZG1pbiIsImN1c3RvbWVyIl0sImVtYWlsIjoiY3VzdG9tZXIxQGV4YW1wbGUuY29tIiwiYXVkIjpbImh0dHBzOi8vYXNrLmFwaSIsImh0dHBzOi8vcGF5bWVudC5hcGkiLCJodHRwczovL3dlYmZmIiwiaHR0cHM6Ly9tb2JpbGViZmYiXSwibmJmIjoxNzIxNDcwODYwLCJleHAiOjE4OTE3MjgwMDAsImlhdCI6MTcyMTQ3MDg2MSwiaXNzIjoidHJhbmNoeS50ZWNoIn0.HnkzBavo_OK7_tVNUwSXagsCePIRzq-FT15xpqLb470
 
-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IkFkbWluVXNlciIsInN1YiI6IkFkbWluVXNlciIsImp0aSI6Ijc2NTIzNjQ0Iiwicm9sZSI6WyJhZG1pbiIsImN1c3RvbWVyIl0sImF1ZCI6WyJodHRwczovL2Fzay5hcGkiLCJodHRwczovL3BheW1lbnQuYXBpIiwiaHR0cHM6Ly93ZWJmZiIsImh0dHBzOi8vbW9iaWxlYmZmIl0sIm5iZiI6MTcyMTM4MzM4MywiZXhwIjoxODkxNzI4MDAwLCJpYXQiOjE3MjEzODMzODQsImlzcyI6InRyYW5jaHkudGVjaCJ9.bUaU8rV4mdquyRfLS2XALPKjTWurZxeeJlifzs6x_s4
 
 - Sub graphql - Distributed schemas
 https://learn.microsoft.com/en-us/dotnet/core/tools/local-tools-how-to-use

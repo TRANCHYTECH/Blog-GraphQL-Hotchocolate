@@ -3,7 +3,7 @@ using Tranchy.Common.Data;
 
 namespace Tranchy.QuestionModule.Data;
 
-[Collection("QuestionPriority")]
+[Collection("QuestionPriorities")]
 public class QuestionPriority : Entity, ICreatedOn, IModifiedOn
 {
     public required string Key { get; set; }

@@ -8,14 +8,14 @@ var services = builder.Services;
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 services.AddGraphQLServer().AllowIntrospection(allow: true).AddAuthorization();
 
-PaymentModule.ConfigureServices(services, builder.Configuration);
+PaymentModuleStartup.ConfigureServices(services, builder.Configuration);
 
 var app = builder.Build();
 
 if (app.Configuration.GetValue<bool>("ApplyMigrationsOnStartup"))
 {
     await using var scope = app.Services.CreateAsyncScope();
-    await PaymentModule.MigrateDatabase(scope.ServiceProvider);
+    await PaymentModuleStartup.MigrateDatabase(scope.ServiceProvider);
 }
 
 app.UseHttpsRedirection();

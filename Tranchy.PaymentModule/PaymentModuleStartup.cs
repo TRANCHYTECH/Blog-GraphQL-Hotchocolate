@@ -6,9 +6,7 @@ using Tranchy.PaymentModule.Data;
 
 namespace Tranchy.PaymentModule;
 
-#pragma warning disable MA0049 // Type name should not match containing namespace
-public class PaymentModule : IModule
-#pragma warning restore MA0049 // Type name should not match containing namespace
+public class PaymentModuleStartup : IModule
 {
     public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {

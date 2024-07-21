@@ -3,18 +3,44 @@
   mutation: Mutation
 }
 
+interface Error {
+  message: String!
+}
+
+type CreateQuestionPayload {
+  question: Question
+  errors: [CreateQuestionError!]
+}
+
 type KeyValuePairOfStringAndString {
   key: String!
   value: String!
 }
 
 type Mutation {
-  createQuestion(request: CreateQuestionRequestInput!): Question! @tag(name: "mobile")
-  seedMetadata: Boolean! @tag(name: "web") @authorize(roles: [ "admin" ])
+  createQuestion(input: CreateQuestionInput!): CreateQuestionPayload!
+  seedMetadata: SeedMetadataPayload! @tag(name: "web") @authorize(roles: [ "admin" ])
+}
+
+type NotFoundCategoryError implements Error {
+  message: String!
+  categoryKeys: [String!]!
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+  "Indicates whether more edges exist following the set defined by the clients arguments."
+  hasNextPage: Boolean!
+  "Indicates whether more edges exist prior the set defined by the clients arguments."
+  hasPreviousPage: Boolean!
+  "When paginating backwards, the cursor to continue."
+  startCursor: String
+  "When paginating forwards, the cursor to continue."
+  endCursor: String
 }
 
 type Query {
-  questionCategories: [QuestionCategory!]!
+  questionCategories("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String order: [QuestionCategorySortInput!] where: QuestionCategoryFilterInput): QuestionCategoriesConnection
   questions: [Question!]!
 }
 
@@ -23,8 +49,8 @@ type Question {
   title: String!
   supportLevel: SupportLevel!
   status: QuestionStatus!
-  priorityId: String
-  questionCategoryIds: [String!]!
+  priorityKey: String
+  categoryKeys: [String!]!
   communityShareAgreement: Boolean
   consultant: QuestionConsultant
   permissions: QuestionPermissions
@@ -37,8 +63,25 @@ type Question {
   questionCategories: [QuestionCategory!]!
 }
 
+"A connection to a list of items."
+type QuestionCategoriesConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [QuestionCategoriesEdge!]
+  "A flattened list of the nodes."
+  nodes: [QuestionCategory!]
+}
+
+"An edge in a connection."
+type QuestionCategoriesEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: QuestionCategory!
+}
+
 type QuestionCategory {
-  hasDefaultID: Boolean!
   key: String!
   title: [KeyValuePairOfStringAndString!]!
   description: [KeyValuePairOfStringAndString!]!
@@ -59,12 +102,80 @@ type QuestionPermissions {
   directChatTargetUserId: String
 }
 
-input CreateQuestionRequestInput {
+type SeedMetadataPayload {
+  boolean: Boolean
+}
+
+union CreateQuestionError = NotFoundCategoryError
+
+input CreateQuestionInput {
   title: String!
   supportLevel: SupportLevel!
-  priorityId: String
-  questionCategoryIds: [String!]!
+  priorityKey: String
+  categoryKeys: [String!]!
   communityShareAgreement: Boolean
+}
+
+input DateTimeOperationFilterInput {
+  eq: DateTime
+  neq: DateTime
+  in: [DateTime]
+  nin: [DateTime]
+  gt: DateTime
+  ngt: DateTime
+  gte: DateTime
+  ngte: DateTime
+  lt: DateTime
+  nlt: DateTime
+  lte: DateTime
+  nlte: DateTime
+}
+
+input KeyValuePairOfStringAndStringFilterInput {
+  and: [KeyValuePairOfStringAndStringFilterInput!]
+  or: [KeyValuePairOfStringAndStringFilterInput!]
+  key: StringOperationFilterInput
+  value: StringOperationFilterInput
+}
+
+input ListFilterInputTypeOfKeyValuePairOfStringAndStringFilterInput {
+  all: KeyValuePairOfStringAndStringFilterInput
+  none: KeyValuePairOfStringAndStringFilterInput
+  some: KeyValuePairOfStringAndStringFilterInput
+  any: Boolean
+}
+
+input QuestionCategoryFilterInput {
+  and: [QuestionCategoryFilterInput!]
+  or: [QuestionCategoryFilterInput!]
+  key: StringOperationFilterInput
+  title: ListFilterInputTypeOfKeyValuePairOfStringAndStringFilterInput
+  description: ListFilterInputTypeOfKeyValuePairOfStringAndStringFilterInput
+  createdOn: DateTimeOperationFilterInput
+  modifiedOn: DateTimeOperationFilterInput
+  id: StringOperationFilterInput
+}
+
+input QuestionCategorySortInput {
+  key: SortEnumType
+  createdOn: SortEnumType
+  modifiedOn: SortEnumType
+  id: SortEnumType
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
+  endsWith: String
+  nendsWith: String
 }
 
 enum ApplyPolicy {
@@ -89,6 +200,11 @@ enum QuestionStatus {
   RESOLVED
   CLOSED
   REPORTED
+}
+
+enum SortEnumType {
+  ASC
+  DESC
 }
 
 enum SupportLevel {

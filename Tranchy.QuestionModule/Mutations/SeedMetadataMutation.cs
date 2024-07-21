@@ -1,22 +1,23 @@
 ﻿using HotChocolate.Authorization;
 using HotChocolate.Types;
+using MongoDB.Bson;
 using MongoDB.Entities;
 using Tranchy.Common;
 using Tranchy.Common.Data;
 using Tranchy.Common.HotChocolate;
 using Tranchy.QuestionModule.Data;
 
-namespace Tranchy.QuestionModule.Mutations
+namespace Tranchy.QuestionModule.Mutations;
+
+[MutationType]
+public static class SeedMetadataMutation
 {
-    [MutationType]
-    public static class SeedMetadataMutation
+    [Web]
+    [Authorize(Roles = [UserRoles.Administrator])]
+    public static async Task<bool> SeedMetadata(CancellationToken cancellation)
     {
-        [Web]
-        [Authorize(Roles = [UserRoles.Administrator])]
-        public static async Task<bool> SeedMetadata(CancellationToken cancellation)
+        var questionCategories = new QuestionCategory[]
         {
-            var questionCategories = new QuestionCategory[]
-            {
             new()
             {
                 Key = "technology",
@@ -54,12 +55,12 @@ namespace Tranchy.QuestionModule.Mutations
                 Description = LocalizedString.Create("Các câu hỏi liên quan đến kế toán",
                     "Question related to accountant")
             }
-            };
-            await DB.DeleteAsync<QuestionCategory>(_ => true, cancellation: default);
-            await DB.InsertAsync(questionCategories, cancellation: cancellation);
+        };
+        await DB.DeleteAsync<QuestionCategory>(_ => true, cancellation: default);
+        await DB.InsertAsync(questionCategories, cancellation: cancellation);
 
-            var questionPriorities = new QuestionPriority[]
-            {
+        var questionPriorities = new QuestionPriority[]
+        {
             new()
             {
                 Key = "urgent",
@@ -79,12 +80,11 @@ namespace Tranchy.QuestionModule.Mutations
                 Description =
                     LocalizedString.Create("Tôi cần trả lời trong tuần", "I need the answer as this week")
             }
-            };
+        };
 
-            await DB.DeleteAsync<QuestionPriority>(_ => true, cancellation: default);
-            await DB.InsertAsync(questionPriorities, cancellation: cancellation);
+        await DB.DeleteAsync<QuestionPriority>(_ => true, cancellation: default);
+        await DB.InsertAsync(questionPriorities, cancellation: cancellation);
 
-            return true;
-        }
+        return true;
     }
 }

@@ -4,14 +4,15 @@ using Tranchy.Common.Data;
 
 namespace Tranchy.QuestionModule.Data;
 
-[Collection("Question")]
+[Collection("Questions")]
 public class Question : EntityBase, IOwnEntity, IQueryIndex
 {
     public required string Title { get; set; }
     public required SupportLevel SupportLevel { get; set; }
     public QuestionStatus Status { get; private set; } = QuestionStatus.New;
-    public string? PriorityId { get; set; }
-    public string[] QuestionCategoryIds { get; set; } = Array.Empty<string>();
+    public string? PriorityKey { get; set; }
+    public string[] CategoryKeys { get; set; } = Array.Empty<string>();
+    
     public bool? CommunityShareAgreement { get; set; }
     public QuestionConsultant? Consultant { get; private set; }
 

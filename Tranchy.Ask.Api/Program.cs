@@ -3,17 +3,19 @@ using Tranchy.QuestionModule;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
-// builder.Services.AddScoped<ITenant, Tenant>();
+builder.Services
+    .AddHttpContextAccessor()
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer();
 
 builder.Services
     .AddGraphQLServer()
+    .AddMutationConventions()
     .AllowIntrospection(allow: true)
     .AddAuthorization();
 
-//todo: add Imodule
+//todo: add IModule
 QuestionModuleStartup.ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
-
 
 var app = builder.Build();
 
