@@ -1,4 +1,4 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+ARG BUILD_IMAGE=mcr.microsoft.com/dotnet/sdk:8.0-noble
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
@@ -6,23 +6,29 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-ARG BUILD_CONTAINER=false
+FROM $BUILD_IMAGE AS prepare-restore-files
+ENV PATH="${PATH}:/root/.dotnet/tools"
+RUN dotnet tool install --global --no-cache dotnet-subset
 WORKDIR /src
-COPY ["Directory.Packages.props", "."]
-COPY ["Directory.Build.props", "."]
-COPY ["Tranchy.Ask.Api/Tranchy.Ask.Api.csproj", "Tranchy.Ask.Api/"]
-COPY ["Tranchy.QuestionModule/Tranchy.QuestionModule.csproj", "Tranchy.QuestionModule/"]
-COPY ["Tranchy.Common/Tranchy.Common.csproj", "Tranchy.Common/"]
-RUN dotnet restore "./Tranchy.Ask.Api/Tranchy.Ask.Api.csproj"
+COPY . .
+RUN dotnet subset restore Tranchy.sln --root-directory /src --output /restore_subset
+
+FROM $BUILD_IMAGE AS restore
+WORKDIR /src
+COPY ./dotnet-tools.json .
+RUN dotnet tool restore
+COPY --from=prepare-restore-files /restore_subset .
+RUN dotnet restore
+
+FROM restore AS build
+ARG BUILD_CONFIGURATION=Release
 COPY . .
 WORKDIR "/src/Tranchy.Ask.Api"
-RUN dotnet build "./Tranchy.Ask.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./Tranchy.Ask.Api.csproj" -c $BUILD_CONFIGURATION --no-restore
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Tranchy.Ask.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Tranchy.Ask.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-build --no-restore
 
 FROM base AS final
 WORKDIR /app

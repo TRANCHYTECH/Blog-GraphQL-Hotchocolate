@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using MongoDB.Entities;
@@ -10,14 +9,14 @@ using MongoDB.Driver.Core.Configuration;
 
 namespace Tranchy.QuestionModule;
 
-public static class QuestionModuleStartup
+public class QuestionModuleStartup : IModuleStartup
 {
-    public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment hostEnvironment)
+    public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        var conventionPack = new ConventionPack { new IgnoreExtraElementsConvention(true) };
+        var conventionPack = new ConventionPack { new IgnoreExtraElementsConvention(ignoreExtraElements: true) };
 
         ConventionRegistry.Register("TranchyAskDefaultConventions", conventionPack, _ => true);
-        var conn = MongoClientSettings.FromConnectionString(configuration.GetConnectionString("Question"));
+        MongoClientSettings conn = GetQuestionConnectionString(configuration);
 
         using var loggerFactory = LoggerFactory.Create(b =>
         {
@@ -27,16 +26,30 @@ public static class QuestionModuleStartup
         });
         conn.LoggingSettings = new LoggingSettings(loggerFactory);
 
-        DB.InitAsync("question", conn).Wait(cancellationToken: default);
-        DB.DatabaseFor<Question>("question");
-        DB.DatabaseFor<QuestionCategory>("question");
-        DB.DatabaseFor<QuestionPriority>("question");
-
         var hotChocolateBuilder = services.AddGraphQL();
         hotChocolateBuilder
             .AddQuestionModuleTypes()
             .AddMongoDbSorting()
             .AddMongoDbFiltering()
             .AddMongoDbPagingProviders();
+    }
+
+    public static async Task InitDatabase(IConfiguration configuration)
+    {
+        MongoClientSettings conn = GetQuestionConnectionString(configuration);
+        await DB.InitAsync("question", conn);
+        DB.DatabaseFor<Question>("question");
+        DB.DatabaseFor<QuestionCategory>("question");
+        DB.DatabaseFor<QuestionPriority>("question");
+    }
+
+    public static async Task MigrateDatabase(IServiceProvider serviceProvider)
+    {
+        await SampleCoreData.Seed();
+    }
+
+    private static MongoClientSettings GetQuestionConnectionString(IConfiguration configuration)
+    {
+        return MongoClientSettings.FromConnectionString(configuration.GetConnectionString("Question"));
     }
 }

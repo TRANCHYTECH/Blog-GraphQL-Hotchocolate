@@ -5,7 +5,8 @@ namespace Tranchy.Common;
 
 public class Tenant(IHttpContextAccessor httpContextAccessor) : ITenant
 {
-    private IEnumerable<Claim> Claims => httpContextAccessor?.HttpContext?.User?.Claims ?? Array.Empty<Claim>();
+    private IEnumerable<Claim> Claims => httpContextAccessor?.HttpContext?.User?.Claims ?? [];
+
     public string Email => GetClaim(ClaimTypes.Email);
 
     public string UserId => GetClaim(ClaimTypes.NameIdentifier);
@@ -13,6 +14,6 @@ public class Tenant(IHttpContextAccessor httpContextAccessor) : ITenant
     private string GetClaim(string claimType)
     {
         var claim = Claims.FirstOrDefault(c => string.Equals(c.Type, claimType, StringComparison.Ordinal));
-        return claim?.Value ?? string.Empty;
+        return claim?.Value ?? throw new ArgumentNullException(claimType);
     }
 }

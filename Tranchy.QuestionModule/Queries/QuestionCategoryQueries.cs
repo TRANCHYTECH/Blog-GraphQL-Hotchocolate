@@ -12,10 +12,7 @@ public static class QuestionCategoryQueries
     [UsePaging]
     [UseSorting]
     [UseFiltering]
-    public static IExecutable<QuestionCategory> GetQuestionCategories()
-    {
-        return DB.Collection<QuestionCategory>().AsExecutable();
-    }
+    public static IExecutable<QuestionCategory> GetQuestionCategories() => DB.Collection<QuestionCategory>().AsExecutable();
 
     [DataLoader]
     public static async Task<IReadOnlyDictionary<string, QuestionCategory>> GetQuestionCategoriesByKeys(IReadOnlyList<string> keys,

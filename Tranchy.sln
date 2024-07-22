@@ -14,7 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		docker-compose.yml = docker-compose.yml
+		Dockerfile = Dockerfile
 		dotnet-tools.json = dotnet-tools.json
+		HowToRun.md = HowToRun.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tranchy.Ask.Api", "Tranchy.Ask.Api\Tranchy.Ask.Api.csproj", "{FF15E82A-82E6-4BC6-BF59-067DA9D8F891}"
@@ -25,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tranchy.Payment.Api", "Tran
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tranchy.WebBff", "Tranchy.WebBff\Tranchy.WebBff.csproj", "{86BB342C-440C-49FC-9577-C61E730BF003}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tranchy.MobileBff", "Tranchy.MobileBff\Tranchy.MobileBff.csproj", "{2B217B3E-B30E-46A5-ADC8-309D9BC18FC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tranchy.MobileBff", "Tranchy.MobileBff\Tranchy.MobileBff.csproj", "{2B217B3E-B30E-46A5-ADC8-309D9BC18FC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

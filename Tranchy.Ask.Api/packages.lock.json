@@ -640,6 +640,7 @@
         "type": "Project",
         "dependencies": {
           "HotChocolate.AspNetCore": "[13.9.7, )",
+          "HotChocolate.AspNetCore.CommandLine": "[13.9.7, )",
           "Microsoft.AspNetCore.Http.Abstractions": "[2.2.0, )",
           "Microsoft.Extensions.Configuration.Abstractions": "[8.0.0, )",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "[8.0.1, )",

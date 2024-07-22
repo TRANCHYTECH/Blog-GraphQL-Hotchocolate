@@ -9,8 +9,5 @@ namespace Tranchy.QuestionModule.Queries;
 [QueryType]
 public static class QuestionQueries
 {
-    public static IExecutable<Question> GetQuestions()
-    {
-        return DB.Collection<Question>().AsExecutable();
-    }
+    public static IExecutable<Question> GetQuestions() => DB.Collection<Question>().AsExecutable();
 }

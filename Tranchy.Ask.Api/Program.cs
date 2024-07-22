@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Tranchy.Common;
 using Tranchy.QuestionModule;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 builder.Services
     .AddHttpContextAccessor()
@@ -14,8 +16,7 @@ builder.Services
     .AllowIntrospection(allow: true)
     .AddAuthorization();
 
-//todo: add IModule
-QuestionModuleStartup.ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
+QuestionModuleStartup.ConfigureServices(builder.Services, configuration);
 
 var app = builder.Build();
 
@@ -24,7 +25,21 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapBananaCakePop("/api/graphql/ui").AllowAnonymous();
+if (configuration.GetValue<bool>("EnableBananaCakePop"))
+{
+    app.MapBananaCakePop("/api/graphql/ui").AllowAnonymous();
+}
 app.MapGraphQLHttp("/api/graphql").RequireAuthorization();
 
-await app.RunWithGraphQLCommandsAsync(args);
+if (!args.IsGraphQLCommand())
+{
+    await QuestionModuleStartup.InitDatabase(configuration);
+}
+
+if (app.Configuration.GetValue<bool>("ApplyMigrationsOnStartup"))
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    await QuestionModuleStartup.MigrateDatabase(scope.ServiceProvider);
+}
+
+await app.RunWithCustomGraphQLCommandsAsync(args);

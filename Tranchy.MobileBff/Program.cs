@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
+using Tranchy.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,4 +37,4 @@ app.UseAuthorization();
 
 app.MapGraphQL();
 
-await app.RunWithGraphQLCommandsAsync(args);
+await app.RunWithCustomGraphQLCommandsAsync(args);

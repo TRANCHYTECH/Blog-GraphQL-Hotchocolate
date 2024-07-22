@@ -3,6 +3,10 @@
   mutation: Mutation
 }
 
+type CreateDepositPayload {
+  deposit: Deposit
+}
+
 type Deposit {
   id: Int!
   questionId: String!
@@ -11,16 +15,15 @@ type Deposit {
 }
 
 type Mutation {
-  createDeposit(request: CreateDepositRequestInput!): Deposit!
+  createDeposit(input: CreateDepositInput!): CreateDepositPayload!
 }
 
 type Query {
-  ping(questionId: String!): String! @allowAnonymous
   deposit(questionId: String!): Deposit
   deposits: [Deposit!]!
 }
 
-input CreateDepositRequestInput {
+input CreateDepositInput {
   questionId: String!
   amount: Float!
 }
@@ -30,5 +33,3 @@ enum ApplyPolicy {
   AFTER_RESOLVER
   VALIDATION
 }
-
-directive @allowAnonymous repeatable on FIELD_DEFINITION

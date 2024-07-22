@@ -11,5 +11,5 @@ public enum QuestionStatus
     Rejected = 7,
     Resolved = 8,
     Closed = 9,
-    Reported = 10
+    Reported = 10,
 }

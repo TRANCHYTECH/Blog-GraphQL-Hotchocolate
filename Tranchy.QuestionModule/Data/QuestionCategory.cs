@@ -1,4 +1,3 @@
-using HotChocolate;
 using HotChocolate.Types;
 using MongoDB.Entities;
 using Tranchy.Common.Data;
@@ -9,9 +8,9 @@ namespace Tranchy.QuestionModule.Data;
 public class QuestionCategory : EntityBase
 {
     public required string Key { get; init; }
-    
+
     public required LocalizedString Title { get; init; }
-    
+
     public required LocalizedString Description { get; init; }
 }
 

@@ -16,6 +16,16 @@
           "HotChocolate.Utilities.DependencyInjection": "13.9.7"
         }
       },
+      "HotChocolate.AspNetCore.CommandLine": {
+        "type": "Direct",
+        "requested": "[13.9.7, )",
+        "resolved": "13.9.7",
+        "contentHash": "NcI7yM3S22W0lDKTLVwzxjR8jfzIBfzn0WsNcoTKpyGZL3x/+XYMvbHnAe8g8bMIKSVtflf3+KtrpRlQtletgw==",
+        "dependencies": {
+          "HotChocolate": "13.9.7",
+          "System.CommandLine": "2.0.0-beta4.22272.1"
+        }
+      },
       "Meziantou.Analyzer": {
         "type": "Direct",
         "requested": "[2.0.160, )",
@@ -411,6 +421,11 @@
         "type": "Transitive",
         "resolved": "8.0.0",
         "contentHash": "AurL6Y5BA1WotzlEvVaIDpqzpIPvYnnldxru8oXJU2yFxFUy3+pNXjXd1ymO+RA0rq0+590Q8gaz2l3Sr7fmqg=="
+      },
+      "System.CommandLine": {
+        "type": "Transitive",
+        "resolved": "2.0.0-beta4.22272.1",
+        "contentHash": "1uqED/q2H0kKoLJ4+hI2iPSBSEdTuhfCYADeJrAqERmiGQ2NNacYKRNEQ+gFbU4glgVyK8rxI+ZOe1onEtr/Pg=="
       },
       "System.ComponentModel.Annotations": {
         "type": "Transitive",

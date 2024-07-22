@@ -6,8 +6,11 @@ namespace Tranchy.PaymentModule.Data;
 public class Deposit
 {
     public int Id { get; set; }
+
     public required string QuestionId { get; set; }
+
     public required double Amount { get; set; }
+
     public required string Status { get; set; }
 }
 

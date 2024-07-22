@@ -2,7 +2,6 @@
 using HotChocolate;
 using HotChocolate.Types;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
 using MongoDB.Entities;
 using Tranchy.Common;
 using Tranchy.QuestionModule.Data;
@@ -20,9 +19,10 @@ public class CreateQuestionMutation
         ClaimsPrincipal principal,
         [Service] ILogger<CreateQuestionMutation> logger)
     {
-        var foundCategories = await DB.Collection<QuestionCategory>()
-            .Find(c => input.CategoryKeys.Contains(c.Key))
-            .Project(c => c.Key).ToListAsync();
+        var foundCategories = await DB.Find<QuestionCategory, string>()
+            .Match(c => input.CategoryKeys.Contains(c.Key))
+            .Project(c => c.Key)
+            .ExecuteAsync();
         var notFoundCategories = input.CategoryKeys.Except(foundCategories).ToArray();
         if (notFoundCategories.Length != 0)
         {
@@ -36,7 +36,7 @@ public class CreateQuestionMutation
             SupportLevel = input.SupportLevel,
             PriorityKey = input.PriorityKey,
             CategoryKeys = input.CategoryKeys,
-            CommunityShareAgreement = input.CommunityShareAgreement
+            CommunityShareAgreement = input.CommunityShareAgreement,
         };
         await DB.InsertAsync(newQuestion);
         logger.LogInformation("new question created");

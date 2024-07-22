@@ -6,7 +6,7 @@ using Tranchy.PaymentModule.Data;
 
 namespace Tranchy.PaymentModule;
 
-public class PaymentModuleStartup : IModule
+public class PaymentModuleStartup : IModuleStartup
 {
     public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
