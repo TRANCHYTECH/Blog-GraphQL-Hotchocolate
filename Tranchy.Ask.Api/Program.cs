@@ -31,7 +31,7 @@ if (configuration.GetValue<bool>("EnableBananaCakePop"))
 }
 app.MapGraphQLHttp("/api/graphql").RequireAuthorization();
 
-if (!args.IsGraphQLCommand())
+if (!args.IsGraphQlCommand())
 {
     await QuestionModuleStartup.InitDatabase(configuration);
 }
@@ -42,4 +42,4 @@ if (app.Configuration.GetValue<bool>("ApplyMigrationsOnStartup"))
     await QuestionModuleStartup.MigrateDatabase(scope.ServiceProvider);
 }
 
-await app.RunWithCustomGraphQLCommandsAsync(args);
+await app.RunWithCustomGraphQlCommandsAsync(args);

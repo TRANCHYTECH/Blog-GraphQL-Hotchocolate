@@ -34,4 +34,4 @@ if (configuration.GetValue<bool>("EnableBananaCakePop"))
 }
 app.MapGraphQLHttp("/api/graphql").RequireAuthorization();
 
-await app.RunWithCustomGraphQLCommandsAsync(args);
+await app.RunWithCustomGraphQlCommandsAsync(args);

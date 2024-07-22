@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Tranchy.Common;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 builder.Services.AddAuthorization();
@@ -35,6 +36,10 @@ app.UseForwardedHeaders();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGraphQL();
+if (configuration.GetValue<bool>("EnableBananaCakePop"))
+{
+    app.MapBananaCakePop("/api/graphql/ui").AllowAnonymous();
+}
+app.MapGraphQLHttp("/api/graphql").RequireAuthorization();
 
-await app.RunWithCustomGraphQLCommandsAsync(args);
+await app.RunWithCustomGraphQlCommandsAsync(args);
