@@ -11,6 +11,8 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
 services.AddGraphQLServer()
     .AllowIntrospection(allow: true)
     .AddMutationConventions()
+    .AddSorting()
+    .AddFiltering()
     .AddAuthorization();
 
 PaymentModuleStartup.ConfigureServices(services, configuration);

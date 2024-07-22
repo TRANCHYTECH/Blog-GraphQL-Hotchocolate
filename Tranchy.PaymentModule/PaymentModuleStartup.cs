@@ -18,7 +18,7 @@ public class PaymentModuleStartup : IModuleStartup
             .AddPaymentModuleTypes();
     }
 
-    public static void SetupDbContext(IServiceProvider serviceProvider, DbContextOptionsBuilder options)
+    private static void SetupDbContext(IServiceProvider serviceProvider, DbContextOptionsBuilder options)
     {
         string? connectionString = serviceProvider.GetRequiredService<IConfiguration>().GetConnectionString("Payment");
         options.UseSqlServer(connectionString, sqlOptions =>

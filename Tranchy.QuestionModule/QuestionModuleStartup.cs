@@ -26,12 +26,7 @@ public class QuestionModuleStartup : IModuleStartup
         });
         conn.LoggingSettings = new LoggingSettings(loggerFactory);
 
-        var hotChocolateBuilder = services.AddGraphQL();
-        hotChocolateBuilder
-            .AddQuestionModuleTypes()
-            .AddMongoDbSorting()
-            .AddMongoDbFiltering()
-            .AddMongoDbPagingProviders();
+        services.AddGraphQL().AddQuestionModuleTypes();
     }
 
     public static async Task InitDatabase(IConfiguration configuration)

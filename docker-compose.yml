@@ -17,7 +17,7 @@ services:
     environment:
       - ACCEPT_EULA=true
       - SA_PASSWORD=Password@123
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/azure-sql-edge:latest
     ports:
       - "1434:1433"
 

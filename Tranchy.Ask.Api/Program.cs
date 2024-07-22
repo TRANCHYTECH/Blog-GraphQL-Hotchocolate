@@ -13,6 +13,9 @@ builder.Services
 builder.Services
     .AddGraphQLServer()
     .AddMutationConventions()
+    .AddMongoDbSorting()
+    .AddMongoDbFiltering()
+    .AddMongoDbPagingProviders()
     .AllowIntrospection(allow: true)
     .AddAuthorization();
 
