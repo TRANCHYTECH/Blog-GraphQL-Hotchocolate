@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using StackExchange.Redis;
 using Tranchy.Common;
 using Tranchy.QuestionModule;
 
@@ -6,12 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 builder.Services
+    .AddSingleton(_ => ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!))
     .AddHttpContextAccessor()
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();
 
 builder.Services
     .AddGraphQLServer()
+    .AddRedisSubscriptions(sp => sp.GetRequiredService<ConnectionMultiplexer>())
     .AddMutationConventions()
     .AddMongoDbSorting()
     .AddMongoDbFiltering()

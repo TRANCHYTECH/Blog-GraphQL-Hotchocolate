@@ -3,17 +3,8 @@
   mutation: Mutation
 }
 
-interface Error {
-  message: String!
-}
-
 type CreateDepositPayload {
   deposit: Deposit
-}
-
-type CreateQuestionPayload {
-  errors: [CreateQuestionError!]
-  question: Question
 }
 
 type Deposit {
@@ -23,20 +14,26 @@ type Deposit {
   status: String!
 }
 
-type KeyValuePairOfStringAndString {
-  key: String!
-  value: String!
+"A connection to a list of items."
+type DepositsConnection {
+  "A list of edges."
+  edges: [DepositsEdge!]
+  "A flattened list of the nodes."
+  nodes: [Deposit!]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type DepositsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Deposit!
 }
 
 type Mutation {
   createDeposit(input: CreateDepositInput!): CreateDepositPayload!
-  createQuestion(input: CreateQuestionInput!): CreateQuestionPayload!
-  seedCoreData: SeedCoreDataPayload!
-}
-
-type NotFoundCategoryError implements Error {
-  categoryKeys: [String!]!
-  message: String!
 }
 
 "Information about pagination in a connection."
@@ -53,132 +50,58 @@ type PageInfo {
 
 type Query {
   deposit(questionId: String!): Deposit
-  deposits: [Deposit!]!
-  questionCategories("Returns the elements in the list that come after the specified cursor." after: String "Returns the elements in the list that come before the specified cursor." before: String "Returns the first _n_ elements from the list." first: Int "Returns the last _n_ elements from the list." last: Int order: [QuestionCategorySortInput!] where: QuestionCategoryFilterInput): QuestionCategoriesConnection
-  questions: [Question!]!
+  deposits("Returns the elements in the list that come after the specified cursor." after: String "Returns the elements in the list that come before the specified cursor." before: String "Returns the first _n_ elements from the list." first: Int "Returns the last _n_ elements from the list." last: Int order: [DepositSortInput!] where: DepositFilterInput): DepositsConnection
 }
-
-type Question {
-  categoryKeys: [String!]!
-  comment: String!
-  communityShareAgreement: Boolean
-  consultant: QuestionConsultant
-  createdBy: String!
-  createdOn: DateTime!
-  hasDefaultID: Boolean!
-  id: String!
-  modifiedOn: DateTime!
-  permissions: QuestionPermissions
-  priorityKey: String
-  questionCategories: [QuestionCategory!]!
-  status: QuestionStatus!
-  supportLevel: SupportLevel!
-  title: String!
-}
-
-"A connection to a list of items."
-type QuestionCategoriesConnection {
-  "A list of edges."
-  edges: [QuestionCategoriesEdge!]
-  "A flattened list of the nodes."
-  nodes: [QuestionCategory!]
-  "Information to aid in pagination."
-  pageInfo: PageInfo!
-}
-
-"An edge in a connection."
-type QuestionCategoriesEdge {
-  "A cursor for use in pagination."
-  cursor: String!
-  "The item at the end of the edge."
-  node: QuestionCategory!
-}
-
-type QuestionCategory {
-  createdOn: DateTime!
-  description: [KeyValuePairOfStringAndString!]!
-  id: String!
-  key: String!
-  modifiedOn: DateTime!
-  title: [KeyValuePairOfStringAndString!]!
-}
-
-type QuestionConsultant {
-  attachmentIds: [String!]!
-  conclusion: String
-  createdAt: DateTime!
-  userId: String!
-}
-
-type QuestionPermissions {
-  actions: [QuestionAction!]!
-  directChatTargetUserId: String
-}
-
-type SeedCoreDataPayload {
-  boolean: Boolean
-}
-
-union CreateQuestionError = NotFoundCategoryError
 
 input CreateDepositInput {
   amount: Float!
   questionId: String!
 }
 
-input CreateQuestionInput {
-  categoryKeys: [String!]!
-  communityShareAgreement: Boolean
-  priorityKey: String
-  supportLevel: SupportLevel!
-  title: String!
+input DepositFilterInput {
+  amount: FloatOperationFilterInput
+  and: [DepositFilterInput!]
+  id: IntOperationFilterInput
+  or: [DepositFilterInput!]
+  questionId: StringOperationFilterInput
+  status: StringOperationFilterInput
 }
 
-input DateTimeOperationFilterInput {
-  eq: DateTime
-  gt: DateTime
-  gte: DateTime
-  in: [DateTime]
-  lt: DateTime
-  lte: DateTime
-  neq: DateTime
-  ngt: DateTime
-  ngte: DateTime
-  nin: [DateTime]
-  nlt: DateTime
-  nlte: DateTime
-}
-
-input KeyValuePairOfStringAndStringFilterInput {
-  and: [KeyValuePairOfStringAndStringFilterInput!]
-  key: StringOperationFilterInput
-  or: [KeyValuePairOfStringAndStringFilterInput!]
-  value: StringOperationFilterInput
-}
-
-input ListFilterInputTypeOfKeyValuePairOfStringAndStringFilterInput {
-  all: KeyValuePairOfStringAndStringFilterInput
-  any: Boolean
-  none: KeyValuePairOfStringAndStringFilterInput
-  some: KeyValuePairOfStringAndStringFilterInput
-}
-
-input QuestionCategoryFilterInput {
-  and: [QuestionCategoryFilterInput!]
-  createdOn: DateTimeOperationFilterInput
-  description: ListFilterInputTypeOfKeyValuePairOfStringAndStringFilterInput
-  id: StringOperationFilterInput
-  key: StringOperationFilterInput
-  modifiedOn: DateTimeOperationFilterInput
-  or: [QuestionCategoryFilterInput!]
-  title: ListFilterInputTypeOfKeyValuePairOfStringAndStringFilterInput
-}
-
-input QuestionCategorySortInput {
-  createdOn: SortEnumType
+input DepositSortInput {
+  amount: SortEnumType
   id: SortEnumType
-  key: SortEnumType
-  modifiedOn: SortEnumType
+  questionId: SortEnumType
+  status: SortEnumType
+}
+
+input FloatOperationFilterInput {
+  eq: Float
+  gt: Float
+  gte: Float
+  in: [Float]
+  lt: Float
+  lte: Float
+  neq: Float
+  ngt: Float
+  ngte: Float
+  nin: [Float]
+  nlt: Float
+  nlte: Float
+}
+
+input IntOperationFilterInput {
+  eq: Int
+  gt: Int
+  gte: Int
+  in: [Int]
+  lt: Int
+  lte: Int
+  neq: Int
+  ngt: Int
+  ngte: Int
+  nin: [Int]
+  nlt: Int
+  nlte: Int
 }
 
 input StringOperationFilterInput {
@@ -202,34 +125,7 @@ enum ApplyPolicy {
   VALIDATION
 }
 
-enum QuestionAction {
-  GO_TO_CONVERSATION
-  TAKE_CONSULTATION
-}
-
-enum QuestionStatus {
-  ACCEPTED
-  BEING_REVIEWED
-  CANCELLED
-  CLOSED
-  IN_PROGRESS
-  NEW
-  PAYMENT
-  REJECTED
-  REPORTED
-  RESOLVED
-}
-
 enum SortEnumType {
   ASC
   DESC
 }
-
-enum SupportLevel {
-  AGENCY
-  COMMUNITY
-  EXPERT
-}
-
-"The `DateTime` scalar represents an ISO-8601 compliant date time type."
-scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")

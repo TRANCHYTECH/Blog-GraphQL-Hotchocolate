@@ -1,6 +1,7 @@
 ﻿schema {
   query: Query
   mutation: Mutation
+  subscription: Subscription
 }
 
 interface Error {
@@ -103,6 +104,10 @@ type QuestionPermissions {
 
 type SeedCoreDataPayload {
   boolean: Boolean
+}
+
+type Subscription {
+  questionCreated: Question! @tag(name: "web")
 }
 
 union CreateQuestionError = NotFoundCategoryError

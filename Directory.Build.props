@@ -13,9 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- See banned APIs documentation:
-    https://github.com/dotnet/roslyn-analyzers/blob/main/src/Microsoft.CodeAnalysis.BannedApiAnalyzers/BannedApiAnalyzers.Help.md -->
-    <!-- See examples: https://piraces.dev/posts/improve-your-code-using-roslyn-analyzers/ -->
     <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

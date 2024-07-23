@@ -21,6 +21,11 @@ services:
     ports:
       - "1434:1433"
 
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
   tranchy.ask.api:
     image: ${DOCKER_REGISTRY-}tranchyaskapi
     build:
