@@ -24,9 +24,18 @@ builder.Services
 
 QuestionModuleStartup.ConfigureServices(builder.Services, configuration);
 
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+        policy.WithOrigins("http://localhost:4200")
+            .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+}
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
