@@ -382,3 +382,5 @@ MigrationBackup/
 # desktop service store file macOS
 .DS_Store
 
+db_data/
+
