@@ -1,3 +1,4 @@
+// todo: update link to blog
 The source code and configuration related to the Backend are located in the Backend folder.
 
 Here are the instructions to help run the Backend system successfully:
