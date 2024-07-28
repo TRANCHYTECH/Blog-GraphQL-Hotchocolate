@@ -22,6 +22,21 @@ export enum ApplyPolicy {
   Validation = 'VALIDATION'
 }
 
+export type BooleanOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Boolean']['input']>;
+  neq?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type CreateDepositInput = {
+  amount: Scalars['Float']['input'];
+  questionId: Scalars['String']['input'];
+};
+
+export type CreateDepositPayload = {
+  __typename?: 'CreateDepositPayload';
+  deposit?: Maybe<Deposit>;
+};
+
 export type CreateQuestionError = NotFoundCategoryError;
 
 export type CreateQuestionInput = {
@@ -53,8 +68,82 @@ export type DateTimeOperationFilterInput = {
   nlte?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
+export type Deposit = {
+  __typename?: 'Deposit';
+  amount: Scalars['Float']['output'];
+  id: Scalars['Int']['output'];
+  questionId: Scalars['String']['output'];
+  status: Scalars['String']['output'];
+};
+
+export type DepositFilterInput = {
+  amount?: InputMaybe<FloatOperationFilterInput>;
+  and?: InputMaybe<Array<DepositFilterInput>>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  or?: InputMaybe<Array<DepositFilterInput>>;
+  questionId?: InputMaybe<StringOperationFilterInput>;
+  status?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type DepositSortInput = {
+  amount?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  questionId?: InputMaybe<SortEnumType>;
+  status?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type DepositsConnection = {
+  __typename?: 'DepositsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<DepositsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<Deposit>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type DepositsEdge = {
+  __typename?: 'DepositsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: Deposit;
+};
+
 export type Error = {
   message: Scalars['String']['output'];
+};
+
+export type FloatOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Float']['input']>;
+  gt?: InputMaybe<Scalars['Float']['input']>;
+  gte?: InputMaybe<Scalars['Float']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
+  lt?: InputMaybe<Scalars['Float']['input']>;
+  lte?: InputMaybe<Scalars['Float']['input']>;
+  neq?: InputMaybe<Scalars['Float']['input']>;
+  ngt?: InputMaybe<Scalars['Float']['input']>;
+  ngte?: InputMaybe<Scalars['Float']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
+  nlt?: InputMaybe<Scalars['Float']['input']>;
+  nlte?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type IntOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Int']['input']>;
+  gt?: InputMaybe<Scalars['Int']['input']>;
+  gte?: InputMaybe<Scalars['Int']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  lt?: InputMaybe<Scalars['Int']['input']>;
+  lte?: InputMaybe<Scalars['Int']['input']>;
+  neq?: InputMaybe<Scalars['Int']['input']>;
+  ngt?: InputMaybe<Scalars['Int']['input']>;
+  ngte?: InputMaybe<Scalars['Int']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  nlt?: InputMaybe<Scalars['Int']['input']>;
+  nlte?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type KeyValuePairOfStringAndString = {
@@ -77,15 +166,29 @@ export type ListFilterInputTypeOfKeyValuePairOfStringAndStringFilterInput = {
   some?: InputMaybe<KeyValuePairOfStringAndStringFilterInput>;
 };
 
+export type ListQuestionActionOperationFilterInput = {
+  all?: InputMaybe<QuestionActionOperationFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<QuestionActionOperationFilterInput>;
+  some?: InputMaybe<QuestionActionOperationFilterInput>;
+};
+
+export type ListStringOperationFilterInput = {
+  all?: InputMaybe<StringOperationFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<StringOperationFilterInput>;
+  some?: InputMaybe<StringOperationFilterInput>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
-  createQuestion: CreateQuestionPayload;
+  createDeposit: CreateDepositPayload;
   seedCoreData: SeedCoreDataPayload;
 };
 
 
-export type MutationCreateQuestionArgs = {
-  input: CreateQuestionInput;
+export type MutationCreateDepositArgs = {
+  input: CreateDepositInput;
 };
 
 export type NotFoundCategoryError = Error & {
@@ -109,8 +212,25 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: 'Query';
+  deposit?: Maybe<Deposit>;
+  deposits?: Maybe<DepositsConnection>;
   questionCategories?: Maybe<QuestionCategoriesConnection>;
   questions: Array<Question>;
+};
+
+
+export type QueryDepositArgs = {
+  questionId: Scalars['String']['input'];
+};
+
+
+export type QueryDepositsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<DepositSortInput>>;
+  where?: InputMaybe<DepositFilterInput>;
 };
 
 
@@ -121,6 +241,12 @@ export type QueryQuestionCategoriesArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<QuestionCategorySortInput>>;
   where?: InputMaybe<QuestionCategoryFilterInput>;
+};
+
+
+export type QueryQuestionsArgs = {
+  order?: InputMaybe<Array<QuestionSortInput>>;
+  where?: InputMaybe<QuestionFilterInput>;
 };
 
 export type Question = {
@@ -147,6 +273,13 @@ export enum QuestionAction {
   TakeConsultation = 'TAKE_CONSULTATION'
 }
 
+export type QuestionActionOperationFilterInput = {
+  eq?: InputMaybe<QuestionAction>;
+  in?: InputMaybe<Array<QuestionAction>>;
+  neq?: InputMaybe<QuestionAction>;
+  nin?: InputMaybe<Array<QuestionAction>>;
+};
+
 /** A connection to a list of items. */
 export type QuestionCategoriesConnection = {
   __typename?: 'QuestionCategoriesConnection';
@@ -170,7 +303,6 @@ export type QuestionCategoriesEdge = {
 export type QuestionCategory = {
   __typename?: 'QuestionCategory';
   createdOn: Scalars['DateTime']['output'];
-  description: Array<KeyValuePairOfStringAndString>;
   id: Scalars['String']['output'];
   key: Scalars['String']['output'];
   modifiedOn: Scalars['DateTime']['output'];
@@ -180,7 +312,6 @@ export type QuestionCategory = {
 export type QuestionCategoryFilterInput = {
   and?: InputMaybe<Array<QuestionCategoryFilterInput>>;
   createdOn?: InputMaybe<DateTimeOperationFilterInput>;
-  description?: InputMaybe<ListFilterInputTypeOfKeyValuePairOfStringAndStringFilterInput>;
   id?: InputMaybe<StringOperationFilterInput>;
   key?: InputMaybe<StringOperationFilterInput>;
   modifiedOn?: InputMaybe<DateTimeOperationFilterInput>;
@@ -203,10 +334,69 @@ export type QuestionConsultant = {
   userId: Scalars['String']['output'];
 };
 
+export type QuestionConsultantFilterInput = {
+  and?: InputMaybe<Array<QuestionConsultantFilterInput>>;
+  attachmentIds?: InputMaybe<ListStringOperationFilterInput>;
+  conclusion?: InputMaybe<StringOperationFilterInput>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  or?: InputMaybe<Array<QuestionConsultantFilterInput>>;
+  userId?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type QuestionConsultantSortInput = {
+  conclusion?: InputMaybe<SortEnumType>;
+  createdAt?: InputMaybe<SortEnumType>;
+  userId?: InputMaybe<SortEnumType>;
+};
+
+export type QuestionFilterInput = {
+  and?: InputMaybe<Array<QuestionFilterInput>>;
+  categoryKeys?: InputMaybe<ListStringOperationFilterInput>;
+  comment?: InputMaybe<StringOperationFilterInput>;
+  communityShareAgreement?: InputMaybe<BooleanOperationFilterInput>;
+  consultant?: InputMaybe<QuestionConsultantFilterInput>;
+  createdBy?: InputMaybe<StringOperationFilterInput>;
+  createdOn?: InputMaybe<DateTimeOperationFilterInput>;
+  id?: InputMaybe<StringOperationFilterInput>;
+  modifiedOn?: InputMaybe<DateTimeOperationFilterInput>;
+  or?: InputMaybe<Array<QuestionFilterInput>>;
+  permissions?: InputMaybe<QuestionPermissionsFilterInput>;
+  priorityKey?: InputMaybe<StringOperationFilterInput>;
+  status?: InputMaybe<QuestionStatusOperationFilterInput>;
+  supportLevel?: InputMaybe<SupportLevelOperationFilterInput>;
+  title?: InputMaybe<StringOperationFilterInput>;
+};
+
 export type QuestionPermissions = {
   __typename?: 'QuestionPermissions';
   actions: Array<QuestionAction>;
   directChatTargetUserId?: Maybe<Scalars['String']['output']>;
+};
+
+export type QuestionPermissionsFilterInput = {
+  actions?: InputMaybe<ListQuestionActionOperationFilterInput>;
+  and?: InputMaybe<Array<QuestionPermissionsFilterInput>>;
+  directChatTargetUserId?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<QuestionPermissionsFilterInput>>;
+};
+
+export type QuestionPermissionsSortInput = {
+  directChatTargetUserId?: InputMaybe<SortEnumType>;
+};
+
+export type QuestionSortInput = {
+  comment?: InputMaybe<SortEnumType>;
+  communityShareAgreement?: InputMaybe<SortEnumType>;
+  consultant?: InputMaybe<QuestionConsultantSortInput>;
+  createdBy?: InputMaybe<SortEnumType>;
+  createdOn?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  modifiedOn?: InputMaybe<SortEnumType>;
+  permissions?: InputMaybe<QuestionPermissionsSortInput>;
+  priorityKey?: InputMaybe<SortEnumType>;
+  status?: InputMaybe<SortEnumType>;
+  supportLevel?: InputMaybe<SortEnumType>;
+  title?: InputMaybe<SortEnumType>;
 };
 
 export enum QuestionStatus {
@@ -221,6 +411,13 @@ export enum QuestionStatus {
   Reported = 'REPORTED',
   Resolved = 'RESOLVED'
 }
+
+export type QuestionStatusOperationFilterInput = {
+  eq?: InputMaybe<QuestionStatus>;
+  in?: InputMaybe<Array<QuestionStatus>>;
+  neq?: InputMaybe<QuestionStatus>;
+  nin?: InputMaybe<Array<QuestionStatus>>;
+};
 
 export type SeedCoreDataPayload = {
   __typename?: 'SeedCoreDataPayload';
@@ -257,3 +454,10 @@ export enum SupportLevel {
   Community = 'COMMUNITY',
   Expert = 'EXPERT'
 }
+
+export type SupportLevelOperationFilterInput = {
+  eq?: InputMaybe<SupportLevel>;
+  in?: InputMaybe<Array<SupportLevel>>;
+  neq?: InputMaybe<SupportLevel>;
+  nin?: InputMaybe<Array<SupportLevel>>;
+};

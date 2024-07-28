@@ -25,7 +25,6 @@ builder.Services
 
 QuestionModuleStartup.ConfigureServices(builder.Services, configuration);
 
-
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
@@ -40,8 +39,6 @@ app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapGraphQL();
 
 if (configuration.GetValue<bool>("EnableBananaCakePop"))
 {

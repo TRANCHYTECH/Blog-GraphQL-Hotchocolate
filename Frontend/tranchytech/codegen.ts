@@ -1,13 +1,12 @@
-
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: "C:\\Users\\dntau\\source\\repos\\Blog-GraphQL-Hotchocolate\\Tranchy.Ask.Api\\schema.graphql",
+  schema: '../../Backend/Tranchy.WebBff/schema.graphql',
   documents: 'src/**/!(*.generated).ts',
   generates: {
-    "src/types.ts": {
-      plugins: ['typescript']
+    'src/types.ts': {
+      plugins: ['typescript'],
     },
     'src/': {
       preset: 'near-operation-file',
@@ -17,13 +16,10 @@ const config: CodegenConfig = {
       },
       plugins: ['typescript-operations', 'typescript-apollo-angular'],
     },
-    // "src/generated/graphql.ts": {
-    //   plugins: ['typescript', 'typescript-operations', 'typescript-apollo-angular']
-    // },
-    "./graphql.schema.json": {
-      plugins: ["introspection"]
-    }
-  }
+    './graphql.schema.json': {
+      plugins: ['introspection'],
+    },
+  },
 };
 
 export default config;

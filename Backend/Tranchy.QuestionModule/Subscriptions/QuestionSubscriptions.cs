@@ -6,9 +6,9 @@ using Tranchy.QuestionModule.Data;
 namespace Tranchy.QuestionModule.Subscriptions;
 
 [SubscriptionType]
+[Web]
 public static class QuestionSubscriptions
 {
     [Subscribe]
-    [Web]
     public static Question QuestionCreated([EventMessage] Question question) => question;
 }

@@ -22,16 +22,25 @@ builder.Services
 
 builder.Services
     .AddHeaderPropagation(c =>
+    {
+        c.Headers.Add("GraphQL-Preflight");
+        c.Headers.Add("Traceparent");
+        c.Headers.Add("Authorization");
+    });
+
+if (builder.Environment.IsDevelopment())
 {
-    c.Headers.Add("GraphQL-Preflight");
-    c.Headers.Add("Traceparent");
-    c.Headers.Add("Authorization");
-});
+    builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+        policy.WithOrigins("http://localhost:4200")
+            .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+}
 
 var app = builder.Build();
 
 app.UseHeaderPropagation();
 app.UseForwardedHeaders();
+
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();

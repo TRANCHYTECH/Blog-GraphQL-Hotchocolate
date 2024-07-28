@@ -71,7 +71,7 @@ type PageInfo {
 type Query {
   deposit(questionId: String!): Deposit
   questionCategories("Returns the elements in the list that come after the specified cursor." after: String "Returns the elements in the list that come before the specified cursor." before: String "Returns the first _n_ elements from the list." first: Int "Returns the last _n_ elements from the list." last: Int order: [QuestionCategorySortInput!] where: QuestionCategoryFilterInput): QuestionCategoriesConnection
-  questions: [Question!]!
+  questions(order: [QuestionSortInput!] where: QuestionFilterInput): [Question!]!
 }
 
 type Question {
@@ -138,6 +138,11 @@ type Subscription {
 }
 
 union CreateQuestionError = NotFoundCategoryError
+
+input BooleanOperationFilterInput {
+  eq: Boolean
+  neq: Boolean
+}
 
 input CreateDepositInput {
   amount: Float!
@@ -225,6 +230,27 @@ input ListFilterInputTypeOfKeyValuePairOfStringAndStringFilterInput {
   some: KeyValuePairOfStringAndStringFilterInput
 }
 
+input ListQuestionActionOperationFilterInput {
+  all: QuestionActionOperationFilterInput
+  any: Boolean
+  none: QuestionActionOperationFilterInput
+  some: QuestionActionOperationFilterInput
+}
+
+input ListStringOperationFilterInput {
+  all: StringOperationFilterInput
+  any: Boolean
+  none: StringOperationFilterInput
+  some: StringOperationFilterInput
+}
+
+input QuestionActionOperationFilterInput {
+  eq: QuestionAction
+  in: [QuestionAction!]
+  neq: QuestionAction
+  nin: [QuestionAction!]
+}
+
 input QuestionCategoryFilterInput {
   and: [QuestionCategoryFilterInput!]
   createdOn: DateTimeOperationFilterInput
@@ -242,6 +268,70 @@ input QuestionCategorySortInput {
   modifiedOn: SortEnumType
 }
 
+input QuestionConsultantFilterInput {
+  and: [QuestionConsultantFilterInput!]
+  attachmentIds: ListStringOperationFilterInput
+  conclusion: StringOperationFilterInput
+  createdAt: DateTimeOperationFilterInput
+  or: [QuestionConsultantFilterInput!]
+  userId: StringOperationFilterInput
+}
+
+input QuestionConsultantSortInput {
+  conclusion: SortEnumType
+  createdAt: SortEnumType
+  userId: SortEnumType
+}
+
+input QuestionFilterInput {
+  and: [QuestionFilterInput!]
+  categoryKeys: ListStringOperationFilterInput
+  comment: StringOperationFilterInput
+  communityShareAgreement: BooleanOperationFilterInput
+  createdBy: StringOperationFilterInput
+  createdOn: DateTimeOperationFilterInput
+  id: StringOperationFilterInput
+  modifiedOn: DateTimeOperationFilterInput
+  or: [QuestionFilterInput!]
+  permissions: QuestionPermissionsFilterInput
+  priorityKey: StringOperationFilterInput
+  status: QuestionStatusOperationFilterInput
+  supportLevel: SupportLevelOperationFilterInput
+  title: StringOperationFilterInput
+}
+
+input QuestionPermissionsFilterInput {
+  actions: ListQuestionActionOperationFilterInput
+  and: [QuestionPermissionsFilterInput!]
+  directChatTargetUserId: StringOperationFilterInput
+  or: [QuestionPermissionsFilterInput!]
+}
+
+input QuestionPermissionsSortInput {
+  directChatTargetUserId: SortEnumType
+}
+
+input QuestionSortInput {
+  comment: SortEnumType
+  communityShareAgreement: SortEnumType
+  createdBy: SortEnumType
+  createdOn: SortEnumType
+  id: SortEnumType
+  modifiedOn: SortEnumType
+  permissions: QuestionPermissionsSortInput
+  priorityKey: SortEnumType
+  status: SortEnumType
+  supportLevel: SortEnumType
+  title: SortEnumType
+}
+
+input QuestionStatusOperationFilterInput {
+  eq: QuestionStatus
+  in: [QuestionStatus!]
+  neq: QuestionStatus
+  nin: [QuestionStatus!]
+}
+
 input StringOperationFilterInput {
   and: [StringOperationFilterInput!]
   contains: String
@@ -255,6 +345,13 @@ input StringOperationFilterInput {
   nstartsWith: String
   or: [StringOperationFilterInput!]
   startsWith: String
+}
+
+input SupportLevelOperationFilterInput {
+  eq: SupportLevel
+  in: [SupportLevel!]
+  neq: SupportLevel
+  nin: [SupportLevel!]
 }
 
 enum ApplyPolicy {

@@ -105,8 +105,8 @@ type SeedCoreDataPayload {
   boolean: Boolean
 }
 
-type Subscription {
-  questionCreated: Question! @tag(name: "web")
+type Subscription @tag(name: "web") {
+  questionCreated: Question!
 }
 
 union CreateQuestionError = NotFoundCategoryError
